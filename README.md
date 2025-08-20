@@ -102,5 +102,6 @@
 100. Analytics Platform (collect events, query stats)
 
 # Requirements
-no chatgpt, no ai slop, only use it to help you understand a concept, no copy paste.
-implement everything from scrath using python modules, no framerworks(maybe for crud apps)
+-no chatgpt, no ai slop, only use it to help you understand a concept, no copy paste.
+-implement everything from scrath using python modules, no framerworks(maybe for crud apps)
+-take notes
