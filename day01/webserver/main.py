@@ -15,36 +15,44 @@ def main():
         #socket listens for connections from clients
         s.listen(5)
 
+        print(f"web server ready to servr...{HOST}:{PORT}")
+
         while True:
-            
-            print('web server ready to serve ...')
+            conn ,addr = s.accept()
+            with conn:
+                try:
+                    print(f"connection accepted by {addr}")
+                    data = conn.recv(1024)
+                    print(f"data received{data.decode()}")
 
-            #establish a connection
-            conn, addr = s.accept()
+                    response_body = "Hello Server"
+                    response = (
+                        "HTTP/1.1 200 OK\r\n"
+                        f"Content-Length: {len(response_body)}\r\n"
+                        "Content-Type: text/plain\r\n"
+                        "Connection: close\r\n"
+                        "\r\n"
+                        f"{response_body}"
+                    )
 
-            try:
-                print(f"connected by addr: {addr}")
-                data = conn.recv(1024)
-                print(f"received: {data.decode()}")
-                
+                    conn.sendall(response.encode("utf-8"))
+                    
+                    # Force close after sending response
+                    print("Closing connection now.")
+                    break
 
-                response_body = "Hello World"
-                response = "HTTP/1.1 200 OK \r\n"
-                f"Content-length: {len(response_body)}\r\n"
-                "\r\n"
-                f"{response_body}"
+                except Exception as e:
 
-                conn.sendall(response.encode("utf-8"))
+                    print(f"Error occurred: {e}")
 
-            except Exception as e:
-                
-                print(f"Error: {e}")
+                    error_response = (
+                    "HTTP/1.1 500 Internal Server Error\r\n"
+                    "Content-length: 21 \r\n"
+                    "\r\n"
+                    "500 Internal Server Error"
+                    )
 
-                "HTTP/1.1 500 Internal Server Error\r\n"
-                "Content-length: 21\r\n"
-                "\r\n"
-                "5OO Internal Server Error"
-
+                    conn.sendall(error_response.encode('utf-8'))
 
 if __name__ == "__main__":
     main()
